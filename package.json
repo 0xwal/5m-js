@@ -1,0 +1,23 @@
+{
+  "name": "5m-js",
+  "version": "0.1.1",
+  "description": "Helper package for FiveM JS",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": "git@github.com:0xWaleed/5m-js.git",
+  "author": "0xWaleed <imwaleed@outlook.sa>",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "test": "npm run build && node tests/index.test.js",
+    "pack": "npm run build && npm pack"
+  },
+  "files": [
+    "lib/**/*",
+    "index.d.ts"
+  ],
+  "devDependencies": {
+    "@types/node": "^18.11.7",
+    "typescript": "^4.8.4"
+  }
+}
