@@ -1,6 +1,6 @@
 {
   "name": "5m-js",
-  "version": "0.1.4",
+  "version": "0.2.4",
   "description": "Helper package for FiveM JS",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -8,9 +8,8 @@
   "author": "0xWaleed <imwaleed@outlook.sa>",
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
-    "test": "npm run build && node tests/index.test.js",
-    "pack": "npm run build && npm pack"
+    "prepublish": "npm pack",
+    "publish": "npm publish"
   },
   "files": [
     "lib/**/*"
