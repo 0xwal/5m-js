@@ -11,3 +11,10 @@ RegisterCommand("invoke_client_rpc", async function (source, args) {
   const r = await rpc.client_demo(args[0], 4, 5);
   console.log(r, ": value returned from client");
 });
+
+
+RegisterCommand("invoke_client_native", async function (source, ...args) {
+  const a = await rpc.native.PlayerPedId(10);
+  const r = await rpc.native.SetEntityHealth(10, a, 0)
+  console.log(r, ": value returned from client");
+});
