@@ -86,16 +86,19 @@ function clientRPCRoutine(name) {
 }
 
 
-const nativeProxy = new Proxy({}, {
-  get(target, p, receiver) {
-    const nativeName = p.toString()
-    return  (...args) => {
-      const playerServerId = args[0];
-      args = args.splice(1)
-      return rpcProxyHandler.get(target, "rpc:native")(playerServerId, nativeName, ...args);
-    };
-  }
-})
+let nativeProxy
+if (isServer) {
+  nativeProxy = new Proxy({}, {
+    get(target, p, receiver) {
+      const nativeName = p.toString();
+      return (...args) => {
+        const playerServerId = args[0];
+        args = args.splice(1);
+        return rpcProxyHandler.get(target, "rpc:native")(playerServerId, nativeName, ...args);
+      };
+    }
+  });
+}
 
 
 // register
@@ -113,8 +116,7 @@ rpcProxyHandler.get = (target, name) => {
 
 global.rpc = new Proxy({}, rpcProxyHandler);
 if (!isServer) {
-  rpc["rpc:native"](function(nativeName, ...args) {
-    console.log(args);
+  rpc["rpc:native"](function (nativeName, ...args) {
     const result = global[nativeName](...args);
     return result;
   });
