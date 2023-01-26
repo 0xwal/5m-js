@@ -86,3 +86,31 @@ RegisterCommand("kill-all-players", async function() {
   }
 }, true)
 ```
+
+#### HTTP
+
+##### Perform http request from server
+
+```js
+const r = await httpRequset("https://httpbin.org/anything", {
+  method: "POST",
+  data: "name=5m-js",
+  headers: {
+    "Content-Type": "application/x-www-form-urlencoded"
+  }
+})
+
+console.log(
+  r.statusCode, r.body, r.headers,
+)
+
+const r = await httpRequsetJson("https://httpbin.org/anything", {
+  method: "POST",
+  data: {name: "5m-js"},
+  headers: {
+    "X-Token": "123"
+  }
+})
+```
+
+
