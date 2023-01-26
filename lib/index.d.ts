@@ -11,9 +11,9 @@ declare type Header = { [key: string]: string }
 
 interface RequestOptions
 {
-    method: string;
-    headers: Header[];
-    data: any;
+    method?: string;
+    headers?: Header[];
+    data?: any;
 }
 
 declare global
@@ -22,7 +22,7 @@ declare global
 
     const rpc: rpc;
 
-    function httpRequest(url: string, req: RequestOptions);
+    function httpRequest(url: string, req?: RequestOptions);
 
-    function httpRequestJson(url: string, req: RequestOptions);
+    function httpRequestJson(url: string, req?: RequestOptions);
 }
