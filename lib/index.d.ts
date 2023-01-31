@@ -31,7 +31,7 @@ declare global
 
     const rpc: rpc;
 
-    function httpRequest(url: string, req?: RequestOptions);
+    function httpRequest(url: string, req?: RequestOptions): Response;
 
-    function httpRequestJson(url: string, req?: RequestOptions);
+    function httpRequestJson(url: string, req?: RequestOptions): Response;
 }
