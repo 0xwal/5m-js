@@ -7,12 +7,12 @@ interface rpc
     native: any;
 }
 
-declare type Header = { [key: string]: string }
+declare type Headers = { [key: string]: string }
 
 interface RequestOptions
 {
     method?: string;
-    headers?: Header[];
+    headers?: Headers;
     data?: any;
 }
 
