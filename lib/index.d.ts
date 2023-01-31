@@ -1,5 +1,7 @@
 export {};
 
+declare type Headers = { [key: string]: string }
+
 interface rpc
 {
     [key: string]: Function;
@@ -7,7 +9,14 @@ interface rpc
     native: any;
 }
 
-declare type Headers = { [key: string]: string }
+interface Response
+{
+    statusCode: number;
+    body: string;
+    headers: Headers;
+    errorData: string;
+}
+
 
 interface RequestOptions
 {

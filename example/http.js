@@ -23,9 +23,12 @@ const g_responseDescriptor = {};
  * @param {string} body
  * @param {object} headers
  */
-function handleHttpResponse(token, statusCode, body, headers) {
+function handleHttpResponse(token, statusCode, body, headers, errorData) {
   // handle response
   const handler = g_responseDescriptor[token];
+
+  delete g_responseDescriptor[token]
+
   if (!handler) {
     throw new Error("Invalid token");
   }
@@ -36,7 +39,8 @@ function handleHttpResponse(token, statusCode, body, headers) {
   const response = {
     statusCode,
     body,
-    headers
+    headers,
+    errorData
   };
 
   handler(response);
@@ -56,7 +60,7 @@ function httpRequest(url, requestOptions) {
 
   const id = PerformHttpRequestInternalEx(request);
 
-  return new Promise((r, e) => {
+  return new Promise((r) => {
     g_responseDescriptor[id] = r;
   });
 }
@@ -71,3 +75,6 @@ function httpRequestJson(url, requestOptions) {
 
   return httpRequest(url, requestOptions);
 }
+
+global.httpRequest = httpRequest
+global.httpRequestJson = httpRequestJson

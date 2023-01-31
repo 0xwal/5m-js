@@ -20,8 +20,22 @@ RegisterCommand("invoke_client_native", async function (source, ...args) {
 });
 
 
+
 RegisterCommand("invoke_http_request", async function () {
-  const r = await httpRequest("https://httpbin.org/anything", {
+  const r = await httpRequest("https://jsonplaceholder.typicode.com/users/1", {
+    method: "GET",
+    headers: {}
+  });
+
+  console.log("statusCode", r.statusCode, typeof r.statusCode);
+  console.log("headers", typeof r.headers, r.headers["content-type"]);
+  console.log("body", typeof r.body);
+  console.log(JSON.parse(r.body).id)
+  console.log("errorData", r.errorData)
+});
+
+RegisterCommand("invoke_http_request_post", async function () {
+  const r = await httpRequest("https://jsonplaceholder.typicode.com/users/1", {
     method: "POST",
     data: "name=Waleed", //JSON.stringify({ name: "Waleed" }),
     headers: {
@@ -30,19 +44,19 @@ RegisterCommand("invoke_http_request", async function () {
     }
   });
 
-  console.log(r.statusCode);
-  console.log(r.headers);
-  console.log(r.body);
+  console.log(r.statusCode, typeof r.statusCode);
+  console.log(r.headers, typeof r.headers);
+  console.log(r.body, typeof r.body);
 });
 
 
 RegisterCommand("invoke_http_json_request", async function () {
-  const r = await httpRequestJson("https://httpbin.org/anything", {
+  const r = await httpRequestJson("https://jsonplaceholder.typicode.com/users/1", {
     method: "POST",
     data: { name: "Waleed" }
   });
 
-  console.log(r.statusCode);
-  console.log(r.headers);
-  console.log(r.body);
+  console.log(r.statusCode, typeof r.statusCode);
+  console.log(r.headers, typeof r.headers);
+  console.log(r.body, typeof r.body);
 });
