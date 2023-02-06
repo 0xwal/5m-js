@@ -2,6 +2,13 @@
 
 Helper package for FiveM.
 
+## Installation
+### NPM
+`npm i 5m-js`
+
+### YARN
+`yarn add 5m-js`
+
 ## Feature
 
 * Wrap native functions with `setImmediate` to avoid freezing the main
@@ -92,7 +99,7 @@ RegisterCommand("kill-all-players", async function() {
 ##### Perform http request from server
 
 ```js
-const r = await httpRequset("https://httpbin.org/anything", {
+let r = await httpRequset("https://httpbin.org/anything", {
   method: "POST",
   data: "name=5m-js",
   headers: {
@@ -104,13 +111,17 @@ console.log(
   r.statusCode, r.body, r.headers,
 )
 
-const r = await httpRequsetJson("https://httpbin.org/anything", {
+r = await httpRequsetJson("https://httpbin.org/anything", {
   method: "POST",
   data: {name: "5m-js"},
   headers: {
     "X-Token": "123"
   }
 })
+
+console.log(
+  r.statusCode, r.body, r.headers,
+)
 ```
 
 
