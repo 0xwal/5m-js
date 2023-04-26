@@ -99,7 +99,7 @@ RegisterCommand("kill-all-players", async function() {
 ##### Perform http request from server
 
 ```js
-let r = await httpRequset("https://httpbin.org/anything", {
+let r = await httpRequest("https://httpbin.org/anything", {
   method: "POST",
   data: "name=5m-js",
   headers: {
