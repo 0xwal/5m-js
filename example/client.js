@@ -1,5 +1,7 @@
 // noinspection JSUnresolvedFunction,JSUnresolvedVariable
 
+require('5m-js');
+
 rpc.client_demo(async function (a, b) {
   return {a, b};
 });

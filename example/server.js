@@ -1,5 +1,7 @@
 // noinspection JSUnresolvedFunction,JSUnresolvedVariable
 
+require('5m-js');
+
 rpc.server_demo(async function () {
   await new Promise(r => setTimeout(r, 3000));
   return "I am from server";
