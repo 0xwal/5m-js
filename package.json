@@ -1,6 +1,6 @@
 {
   "name": "5m-js",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "description": "Helper package for FiveM JS",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
