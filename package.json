@@ -12,7 +12,9 @@
     "publish": "npm publish"
   },
   "files": [
-    "lib/**/*"
+    "lib/**/*",
+    "client.js",
+    "server.js"
   ],
   "devDependencies": {
     "@types/node": "^18.11.7"
