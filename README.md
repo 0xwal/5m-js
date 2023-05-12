@@ -23,7 +23,7 @@ Helper package for FiveM.
 #### Wrap natives within callback
 
 ```js
-require("5m-js");
+require("5m-js/server");
 
 onNet("event-name", async () => {
   const serverId = source;
@@ -39,7 +39,7 @@ onNet("event-name", async () => {
 server.js
 
 ```js
-require("5m-js");
+require("5m-js/server");
 
 // calculate will be the rpc name
 // when passing function, it will be registered as the rpc routine
@@ -67,7 +67,7 @@ RegisterCommand("get-player-health", async function () {
 client.js
 
 ```js
-require("5m-js");
+require("5m-js/client");
 RegisterCommand("calculate-from-server", async function () {
   const r = await rpc.calculate("+", 2, 3);
   console.log(r); // 5
@@ -82,7 +82,7 @@ rpc.getPlayerHealth(function () {
 
 server.js
 ```js
-require("5m-js");
+require("5m-js/server");
 
 RegisterCommand("kill-all-players", async function() {
   const players = getPlayers();
