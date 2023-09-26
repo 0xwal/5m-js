@@ -1,10 +1,20 @@
 // noinspection JSUnresolvedFunction,JSUnresolvedVariable
 
-require('5m-js');
+
+function wait(timeInMS) {
+  return new Promise((r) => {
+    setTimeout(r, timeInMS);
+  });
+}
 
 rpc.server_demo(async function () {
   await new Promise(r => setTimeout(r, 3000));
   return "I am from server";
+});
+
+rpc.server_that_takes_long(async function (a, b) {
+  await wait(13 * 1000);
+  return ["it works", a, b];
 });
 
 
@@ -14,6 +24,15 @@ RegisterCommand("invoke_client_rpc", async function (source, args) {
   console.log(r, ": value returned from client");
 });
 
+
+RegisterCommand("invoke_client_long_rpc", async function (source, args) {
+  const r = await rpc.client_that_takes_long(args[0], 4, 5);
+  console.log(r, ": value returned from client");
+});
+
+RegisterCommand("invoke_invalid_rpc", async function() {
+  await rpc.non_existing(1, 2, 3);
+});
 
 RegisterCommand("invoke_client_native", async function (source, ...args) {
   const a = await rpc.native.PlayerPedId(10);
