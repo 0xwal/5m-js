@@ -63,6 +63,14 @@ onNet(localResourceName("reply"), async (id: string, result: any) => {
 
 
 export function invoke(method: string, ...args: any[]) {
+	const isVoid = method.startsWith("$");
+
+	if (isVoid) {
+		log(`Invoking RPC method [${method}] without waiting for result, args [${args}]`);
+		emitNet(localResourceName(method), "void", ...args);
+		return Promise.resolve(undefined);
+	}
+
 	const promise = new Promise((resolve, reject) => {
 		const id = nextId();
 
@@ -90,10 +98,17 @@ export function register<T>(method: string, handler: RPCHandler<T>) {
 	log(`Registering RPC handler for [${method}]`);
 	const rpcName = localResourceName(method);
 
+	const isVoid = method.startsWith("$");
+
 	onNet(rpcName, async (id: string, ...args: any[]) => {
 		try {
 			log(`Invoking RPC handler for [${method}] with args:`, JSON.stringify(args));
 			let result = handler(...args);
+
+			if (isVoid) {
+				log(`RPC handler for [${method}] returned void and no need to emit reply`);
+				return;
+			}
 
 			if (isThenable(result)) {
 				log(`RPC handler for [${method}] returned a promise, waiting for it to resolve`);
@@ -106,10 +121,16 @@ export function register<T>(method: string, handler: RPCHandler<T>) {
 			emitNet(localResourceName("reply"), id, { ok: true, value: result });
 		} catch (e: any) {
 			const message = e?.message ?? e;
+			if (isVoid) {
+				throw new Error(`RPC void handler for [${method}] throw an error ${message}`);
+			}
+
 			log(`RPC handler for [${method}] failed with error:`, e);
 			emitNet(localResourceName("reply"), id, { ok: false, error: message });
 		}
 	});
+
+	emitNet(localResourceName("register"), method);
 }
 
 

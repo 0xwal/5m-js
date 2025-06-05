@@ -25,3 +25,9 @@ RegisterCommand("test_3", async function() {
 
 	rpc.test_3(1, 2, 3).then(console.log);
 });
+
+RegisterCommand("test_4", async function() {
+	const r = await rpc.$test_4(1, 2, 3);
+	console.log(r);
+
+});

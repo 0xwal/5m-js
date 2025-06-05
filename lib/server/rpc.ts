@@ -65,7 +65,8 @@ onNet(localResourceName("reply"), async (id: string, result: any) => {
 });
 
 onNet(localResourceName("register"), async (method: string) => {
-	log(`Registering client RPC method [${method}]`);
+	const serverId = global.source;
+	log(`Registering client RPC method [${method}] for [${serverId}]`);
 	remoteRPCs.add(method);
 });
 
@@ -76,11 +77,18 @@ onNet(localResourceName("get-names"), async () => {
 });
 
 export function invoke(method: string, serverId: string | number, ...args: any[]) {
-	const promise = new Promise((resolve, reject) => {
-		if (!remoteRPCs.has(method)) {
-			return reject(new Error(`Invalid RPC method [${method}]`));
-		}
+	if (!remoteRPCs.has(method)) {
+		return Promise.reject(new Error(`Invalid RPC method [${method}] for [${serverId}]`));
+	}
 
+	const isVoid = method.startsWith("$");
+	if (isVoid) {
+		log(`Invoking RPC method [${method}] without waiting for result for [${serverId}], args [${args}]`);
+		emitNet(localResourceName(method), serverId, "void", ...args);
+		return Promise.resolve(undefined);
+	}
+
+	const promise = new Promise((resolve, reject) => {
 		const id = nextId();
 
 		const timeout = setTimeout(() => {
@@ -109,11 +117,18 @@ export function register<T>(method: string, handler: RPCHandler<T>) {
 	log(`Registering RPC handler for [${method}]`);
 	const rpcName = localResourceName(method);
 
+	const isVoid = method.startsWith("$");
+
 	onNet(rpcName, async (id: string, ...args: any[]) => {
 		const serverId = global.source;
 		try {
 			log(`Invoking RPC handler for [${method}] from ${serverId} with args:${JSON.stringify(args)}`);
 			let result = handler(serverId, ...args);
+
+			if (isVoid) {
+				log(`RPC handler for [${method}] returned void and no need to emit reply`);
+				return;
+			}
 
 			if (isThenable(result)) {
 				log(`RPC handler for [${method}] returned a promise, waiting for it to resolve`);
@@ -126,11 +141,32 @@ export function register<T>(method: string, handler: RPCHandler<T>) {
 			emitNet(localResourceName("reply"), serverId, id, { ok: true, value: result })
 		} catch (e: any) {
 			const message = e?.message ?? e;
+			if (isVoid) {
+				throw new Error(`RPC void handler for [${method}] throw an error ${message}`);
+			}
 			log(`RPC handler for [${method}] failed with error:`, e);
 			emitNet(localResourceName("reply"), serverId, id, { ok: false, error: message });
 		}
 	});
 	localRPCs.add(method);
+}
+
+export function rejectAllPendingClientRpcInvocationsForPlayer(serverId: number, reason: string) {
+	const keysToDelete = [];
+
+	for (const [id, invocation] of pendingInvocations) {
+		if (invocation.serverId != serverId) {
+			continue;
+		}
+
+		invocation.reject(new Error(reason));
+		clearTimeout(invocation.timeout);
+		keysToDelete.push(id);
+	}
+
+	for (const key of keysToDelete) {
+		pendingInvocations.delete(key);
+	}
 }
 
 export const rpc = new Proxy<any>({}, {

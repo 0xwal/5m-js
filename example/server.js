@@ -20,3 +20,9 @@ rpc.test_3(async (serverId, ...args) => {
 	return ["test_3 returned", ...args];
 });
 
+
+rpc.$test_4(async (serverId, ...args) => {
+	await wait(3000);
+	console.log("invoked");
+});
+

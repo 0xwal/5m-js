@@ -7,11 +7,11 @@
   "license": "MIT",
 	"exports": {
 		"./client": {
-			"import": "./dist/client.js",
+			"import": "./lib/client.ts",
 			"types": "./lib/client.d.ts"
 		},
 		"./server": {
-			"import": "./dist/server.js",
+			"import": "./lib/server.ts",
 			"types": "./lib/server.d.ts"
 		}
 	},

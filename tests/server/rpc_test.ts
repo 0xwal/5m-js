@@ -91,7 +91,7 @@ test("rpc handler can be a promise", done => {
 
 test("invoking invalid rpc", done => {
 	rpcModule.invoke("testing", 1, 2, 3).catch((e: any) => {
-		expect(e.message).toBe(`Invalid RPC method [testing]`)
+		expect(e.message).toBe(`Invalid RPC method [testing] for [1]`)
 		done()
 	});
 
