@@ -1,37 +1,27 @@
-// noinspection JSUnresolvedFunction,JSUnresolvedVariable
+import { rpc } from "../lib/client/rpc";
 
 function wait(timeInMS) {
-  return new Promise((r) => {
-    setTimeout(r, timeInMS);
-  });
+	return new Promise((r) => {
+		setTimeout(r, timeInMS);
+	});
 }
 
-rpc.client_demo(async function (a, b) {
-  return {a, b};
+RegisterCommand("test_1", function() {
+	rpc.test_1(1, 2, 3);
 });
 
-rpc.client_that_takes_long(async function (a, b) {
-  await wait(13 * 1000);
-  return ["it works", a, b];
-});
+RegisterCommand("test_2", async function() {
+	const r = await rpc.test_2(1, 2, 3);
+	console.log(r);
 
-
-RegisterCommand("invoke_server_rpc", async function () {
-  const r = await rpc.server_demo(1, 2, 3);
-  console.log(r);
-});
-
-RegisterCommand("invoke_server_long_rpc", async function () {
-  const r = await rpc.server_that_takes_long(1, 2, 3);
-  console.log(r)
-});
-
-RegisterCommand("invoke_invalid_rpc", async function() {
-  await rpc.non_existing(1, 2, 3);
+	rpc.test_2(1, 2, 3).then(console.log);
+	rpc.test_2(5, 6, 7).then(console.log);
 });
 
 
-RegisterCommand("invoke_invalid_server_rpc", async function () {
-  const r = await rpc.invalid_server_id(1, 2, 3);
-  console.log(r);
+RegisterCommand("test_3", async function() {
+	const r = await rpc.test_3(1, 2, 3);
+	console.log(r);
+
+	rpc.test_3(1, 2, 3).then(console.log);
 });

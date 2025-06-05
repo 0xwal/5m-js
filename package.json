@@ -2,12 +2,22 @@
   "name": "5m-js",
   "version": "0.8.1",
   "description": "Helper package for FiveM JS",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
   "repository": "git@github.com:0xWaleed/5m-js.git",
   "author": "0xWaleed <imwaleed@outlook.sa>",
   "license": "MIT",
+	"exports": {
+		"./client": {
+			"import": "./dist/client.js",
+			"types": "./lib/client.d.ts"
+		},
+		"./server": {
+			"import": "./dist/server.js",
+			"types": "./lib/server.d.ts"
+		}
+	},
   "scripts": {
+		"build": "bun run build.ts && bun run build:types",
+		"build:types": "tsc",
     "prepublish": "npm pack",
     "publish": "npm publish"
   },
@@ -16,7 +26,14 @@
     "client.js",
     "server.js"
   ],
+  "dependencies": {
+    "typescript": "^5.8.3"
+  },
   "devDependencies": {
+    "@citizenfx/client": "^2.0.6418-1",
+    "@citizenfx/server": "^2.0.6418-1",
+    "@sinonjs/fake-timers": "^14.0.0",
+    "@types/bun": "^1.2.15",
     "@types/node": "^18.11.7"
   }
 }

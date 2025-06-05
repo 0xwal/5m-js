@@ -1,12 +1,12 @@
-global.I = new Proxy({}, {
+export const I = new Proxy({}, {
   get(target, key) {
-    const native = global[key];
+		const native = (global as any)[key];
 
     if (native === undefined) {
       throw Error(`'${key.toString()}' is not defined in global scope.`);
     }
 
-    return (...args) => {
+    return (...args: any[]) => {
       return new Promise((resolve) => {
         setImmediate(() => {
           const result = native(...args);
